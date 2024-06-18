@@ -1,36 +1,46 @@
 
 
-// Projetinho 18 anos 
- const maisIdButton = document.getElementById('maisId');
- const menosButton = document.getElementById('menosId');
- const textoButton = document.getElementById('textoId');
+ const minNum = 1;
+ const maxNum = 100;
+ const answer = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum;
 
- let idade= 18;
+ console.log(`Número gerado: ${answer}`);
 
- function atualizarIdade(operacao){
-     if (operacao == 'mais'){
-         idade++;
-     } else if (operacao == 'menos'){
-         idade--;
-     }
-     verificarIdade();
-}
+ const enviarId = document.getElementById('enviarId');
+ const inputField = document.querySelector('input[name="Nome"]');
+ const feedback = document.getElementById('feedback');
 
- function verificarIdade() {
-     const textoElement = document.getElementById('textoId');
-     if (idade <= 17) {
-         textoElement.textContent = "Você não pode entrar nesse site.";
-         maisIdButton.style.display = 'none';
-         menosButton.style.display = 'none';
+ const refreshButton = document.getElementById('refreshButton');
+ refreshButton.addEventListener('click', function(){
+     location.reload();
+ });
+
+ let attempts = 0;
+ let running = true; 
+
+
+ enviarId.addEventListener('click', function() {
+     if (!running) return; 
+     const guess = Number(inputField.value);
+     console.log(`Tentativa do usuário: ${guess}`);
+     attempts++; 
+
+     if (isNaN(guess) || guess < minNum || guess > maxNum ){
+         feedback.textContent = `Por favor, insira um número válido entre ${minNum} e ${maxNum}`;
+     } else if (guess === answer) {
+         feedback.textContent = `Parabéns! Você acertou o número ${answer} em ${attempts} tentativas`;
+         running = false;
+     } else if (guess < answer) {
+         feedback.textContent = 'Tente um número maior';
      } else {
-         textoElement.textContent = "Bem vindo ao site, aproveite.";
-         maisIdButton.style.display = 'none';
-         menosButton.style.display = 'none';
-
+         feedback.textContent = 'Tente um número menor';
      }
-}
+     inputField.value = '';
+     inputField.focus();
+ });
 
- maisIdButton.addEventListener('click', () => atualizarIdade('mais'));
- menosButton.addEventListener('click', () => atualizarIdade('menos'));
+ refreshButton.addEventListener('click', function(){
+     location.reload()
+ });
 
 
